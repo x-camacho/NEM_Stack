@@ -48,7 +48,6 @@ const specificSources = []
 app.get('/show/:idx', (req, res) => {
     const idx = req.params.idx; 
     const sourcesAddress = sources.filter(source => source.name == idx)[0].address
-    console.log(sourcesAddress)
     axios.get(sourcesAddress)
     .then(response => {
         const html = response.data
