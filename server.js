@@ -16,10 +16,6 @@ const sources = [
     },
 ]
 
-app.get('/', (req,res) => {
-    res.json('show');
-});
-
 const articles = [];
 
 sources.forEach(source => {
@@ -39,7 +35,7 @@ sources.forEach(source => {
     }).catch((err) => console.log(err))
  });
 
-app.get('/show', (req, res) => {
+app.get('/', (req, res) => {
     res.json(articles);
 });
 
