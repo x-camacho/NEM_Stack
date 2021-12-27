@@ -7,6 +7,11 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>List of Sources</h1>
+<h1>Shoes ALL PAGE</h1>
+<ul class="shoes">
+    <% for(let i=0; i<shoes.length; i++) { %> 
+      <li><a href="/shoes/<%- i %>"><%= shoes[i].title %></li></a>
+    <% }; %>
+    </ul>
 </body>
 </html>

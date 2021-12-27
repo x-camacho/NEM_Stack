@@ -1,65 +1,33 @@
-const PORT = process.env.PORT || 4000; //for deployment in heroku
-
+// External Modules //
 const express = require('express');
 const axios = require('axios');
 const cheerio = require('cheerio');
+
+// Instanced Module //
 const app = express();
 
-const sources = [
-    {
-        name: 'SneakerNews',
-        address: 'https://sneakernews.com/tag/air-jordan-1/',
-    },
-    {
-        name: 'NiceKicks',
-        address: 'https://www.nicekicks.com/air-jordan-release-dates/',
-    },
-]
+// Configuration //
+const PORT = process.env.PORT || 4000; //for deployment in heroku
+app.set("view engine", "ejs");
 
-const articles = [];
-
-sources.forEach(source => {
-    axios.get(source.address)
-    .then(response => {
-        const html = response.data
-        const $ = cheerio.load(html);
-        $('a:contains("Air Jordan 1")', html).each(function() {
-            const title = $(this).text()
-            const url = $(this).attr('href')
-            articles.push({
-                title,
-                url,
-                source: source.name,
-            })
-        })
-    }).catch((err) => console.log(err))
- });
-
-app.get('/', (req, res) => {
-    res.json(articles);
+// Internal Routes //
+app.get('/', (req, res) => { //Renders Landing Page
+    res.render("home");
 });
 
-const specificSources = []
+app.use("/shoes", require("./routes/shoes"));
 
-app.get('/show/:idx', (req, res) => {
-    const idx = req.params.idx; 
-    const sourcesAddress = sources.filter(source => source.name == idx)[0].address
-    axios.get(sourcesAddress)
-    .then(response => {
-        const html = response.data
-        const $ = cheerio.load(html)
-        $('a:contains("Air Jordan 1")', html).each(function () {
-            const title = $(this).text()
-            const url = $(this).attr('href')
-            specificSources.push({
-                title,
-                url,
-                source: idx
-            })
-        })
-        res.json(specificSources)
-    }).catch(err => console.log(err))
-})
- 
-
+// Server Listener //
 app.listen(PORT, () => console.log(`YO! Server is connected at ${PORT}`))
+
+//------- Project Notes -------------//
+//*MODULES USED*//
+// Utilized Heroku app to depoly API.
+// Utilized RapidAPI to create API.
+// Utilized express.js for backend framework to create a live environment via port config and server file. 
+// Utilized Cheerio for webscraping - allows for us to pick out HTML elements on a webpage like jQuery.
+// Utilized Axios for HTTP CRUD opertations - GET, POST, PUT, DELETE.
+//* SELF TIPS TO REMEMBER *//
+// NPM INIT creates a JSON package file so we can begin adding modules.
+// Check package JSON file for list of dependencies (all of the terminal inputs of npm i "xxx")
+// As a general rule package json files are needed whenver creating a node.js project.
